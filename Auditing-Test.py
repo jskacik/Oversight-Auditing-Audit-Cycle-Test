@@ -288,7 +288,7 @@ def audit(numSemesters):
         print("######################################################")
         print("######################################################")
         print("Semester: " + str(semester))
-        print("Block: " + str(block))
+        print("Cycle: " + str(block))
         # The if statement below is executed only for the first semester
         if semester == 1:
             clubs = [i for i in range(1,
