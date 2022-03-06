@@ -224,9 +224,11 @@ def secondSemCycle(audits, clubs, semester, eligibleClubs, priorityClubs, percen
             eligibleClubs.append(club)
     for club in audits[semester - 3]:
         eligibleClubs.append(club)
+    print(eligibleClubs)
     for club in audits[semester - 4]:
         if club not in auditedClubs:
             priorityClubs.append(club)
+    print(priorityClubs)
 
     print("End of Semester " + str(semester) + " eligible clubs")
     print(*eligibleClubs)
@@ -235,7 +237,7 @@ def secondSemCycle(audits, clubs, semester, eligibleClubs, priorityClubs, percen
     return clubs, eligibleClubs, priorityClubs, biggestClub
 
 
-def thirdSemCycle(audits, eligibleClubs, priorityClubs, clubs, semester, biggestClub):
+def thirdSemCycle(audits, eligibleClubs, priorityClubs, clubs, semester, biggestClub, percentage):
     # this is the function for the third semestrer in the three semester cycle
     print("Clubs:")
     print(*clubs)
@@ -243,10 +245,24 @@ def thirdSemCycle(audits, eligibleClubs, priorityClubs, clubs, semester, biggest
     # First we add all of our priority clubs to our eligible clubs if we have any priority Clubs
     # then we add thast list to our list of audits. This is because the 3rd semester in the cycle is the remainder of
     # the semester where any unaudited clubs in the past two semester get audited.
-    if (len(priorityClubs) != 0):
-        for club in priorityClubs:
-            eligibleClubs.append(club)
-    audits.append(eligibleClubs)
+
+    # if (len(priorityClubs) != 0):
+    #     for club in priorityClubs:
+    #         eligibleClubs.append(club)
+    # audits.append(eligibleClubs)
+
+    numAudit = round(percentage * len(clubs))
+    auditedClubs = []
+    for club in priorityClubs:
+        auditedClubs.append(club)
+    chosenClubsInd = []
+    for i in range(numAudit - len(priorityClubs)):
+        chosenClubsInd = ranClubs(chosenClubsInd, clubs, eligibleClubs)
+    for ind in chosenClubsInd:
+        club = clubs[ind]
+        auditedClubs.append(club)
+
+    audits.append(auditedClubs)
 
     print("Clubs Audited Semester " + str(semester) + ":")
     print(*eligibleClubs)
@@ -291,15 +307,17 @@ def audit(numSemesters):
         print("Cycle: " + str(block))
         # The if statement below is executed only for the first semester
         if semester == 1:
-            clubs = [i for i in range(1,
-                                      11)]  # creates a list with the simulated clubs each club is represented as a number between one and n-1
-            # ^^ If you want to change the number of clubs being audited, change range(1, THIS NUMBER) to range(1, WHATEVER NUMBER YOU WANT + 1)
+            clubs = [i for i in range(1,21)]
+            # creates a list with the simulated clubs each club is represented as a number between one and n-1
+            # ^^ If you want to change the number of clubs being audited, change range(1, THIS NUMBER) to
+            # range(1, WHATEVER NUMBER YOU WANT + 1)
             # for example if you want to run 45 clubs, it should be: range(1, 46)
             biggestClub = clubs[-1]
             # initialize our biggest club (just the highest number) which will be used when adding in clubs later
             print("Clubs:")
             print(*clubs)
-            percentage = 0.33  # Percent of clubs audited each semester
+            percentage = 0.33
+            # ^^ Percent of clubs audited each semester (if you want to change the percentage change this!)
             numAudit = round(
                 len(clubs) * percentage)  # Calculate the number of clubs being audited based on our precentage
             # ^^ (multiplies the number of clubs by our percentage and rounds it to the nearest integer) ^^
@@ -416,7 +434,7 @@ def audit(numSemesters):
                 # If the semester is cleanly divisible by 3 (every 3rd semester) then we run the thirdSemCycle function
                 # (explained above)
                 clubs, eligibleClubs, priorityClubs, biggestClub = thirdSemCycle(audits, eligibleClubs, priorityClubs, clubs,
-                                                                    semester, biggestClub)
+                                                                    semester, biggestClub, percentage)
                 block += 1
             elif (semester - 1) % 3 == 0:
                 # Otherwise if the semester - 1 is cleanly divisible by 3 (For example 4) then we run the firstSemCycle

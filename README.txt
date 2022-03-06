@@ -13,7 +13,7 @@ How to run?
         c. you can see if the python file is in your current working directory and if it is proceed to stwp 7
     7. type "python Auditing-Test.py" and press enter
     8. The program should run!
-    9. email or text me if you cant get it to work 
+    9. email or text me if you cant get it to work
 
 
 
